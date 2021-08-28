@@ -49,8 +49,7 @@ UR_FB_func = lambdify([m,a,E,L,s_t],UR_FB,"numpy")
 import dash_bootstrap_components as dbc
 
 app = Dash(__name__,external_stylesheets=[dbc.themes.GRID])
-
-#Todo put graphs beside each other!
+server = app.server
 
 
 app.layout = html.Div([
