@@ -4,6 +4,7 @@ import plotly.express as px
 import dash_core_components as dcc
 import dash_html_components as html
 import dash
+from dash import Dash
 from dash.dependencies import Input, Output
 
 import numpy as np
