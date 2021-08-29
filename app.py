@@ -130,7 +130,7 @@ def update_graph(m,a,E,L):
     Input("L_input","value"),
     Input("s_true_input","value")])
 def update_ex_post_graph(m,a,E,L,s):
-    bar = pd.DataFrame({"Title":["L_I","L_m","L_m_Fields"], "Solution": [L1_sol0(m,a,E,L),L_m_sol_func(m,a,E,L,s),L_m_FB_func(m,a,E,L,s)]})
+    bar = pd.DataFrame({"Solutions":["L_I","L_m","L_m_Fields"], "Value (# agents)": [L1_sol0(m,a,E,L),L_m_sol_func(m,a,E,L,s),L_m_FB_func(m,a,E,L,s)]})
     fig = px.bar(bar,x="Solutions",y="Value (# agents)")
     return fig
 
@@ -142,7 +142,7 @@ def update_ex_post_graph(m,a,E,L,s):
     Input("L_input","value"),
     Input("s_true_input","value")])
 def update_ex_post_graph(m,a,E,L,s):
-    bar = pd.DataFrame({"Title":["Unemployment Rate","Unemployment Rate Fields"], "Solution": [unemployment_rate_func(m,a,E,L,s),UR_FB_func(m,a,E,L,s)]})
+    bar = pd.DataFrame({"Solutions":["Unemployment Rate","Unemployment Rate Fields"], "Value (rate)": [unemployment_rate_func(m,a,E,L,s),UR_FB_func(m,a,E,L,s)]})
     fig = px.bar(bar,x="Solutions",y="Value (rate)")
     return fig
     
