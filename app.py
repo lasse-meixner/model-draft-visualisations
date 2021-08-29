@@ -118,7 +118,7 @@ def update_graph(m,a,E,L):
     y1 = Pi_eq_func(a,m,s)
     y2 = Pi_M_func(E,L1,L-L1,s)
     df = pd.DataFrame({"s_i":s,"Pi_eq":y1,"Pi_M":y2})
-    fig = px.line(df,y=["Pi_eq","Pi_M"],x="s_i")
+    fig = px.line(df,y=["Pi_eq","Pi_M"],x="s_i",title="Decision threshold")
     fig.add_vline(x=s_eq_func(m,a,E,L,L1))
     return fig
 
@@ -131,7 +131,7 @@ def update_graph(m,a,E,L):
     Input("s_true_input","value")])
 def update_ex_post_graph(m,a,E,L,s):
     bar = pd.DataFrame({"Title":["L_I","L_m","L_m_Fields"], "Solution": [L1_sol0(m,a,E,L),L_m_sol_func(m,a,E,L,s),L_m_FB_func(m,a,E,L,s)]})
-    fig = px.bar(bar,x="Title",y="Solution")
+    fig = px.bar(bar,x="Solutions",y="Value (# agents)")
     return fig
 
 @app.callback(
@@ -143,7 +143,7 @@ def update_ex_post_graph(m,a,E,L,s):
     Input("s_true_input","value")])
 def update_ex_post_graph(m,a,E,L,s):
     bar = pd.DataFrame({"Title":["Unemployment Rate","Unemployment Rate Fields"], "Solution": [unemployment_rate_func(m,a,E,L,s),UR_FB_func(m,a,E,L,s)]})
-    fig = px.bar(bar,x="Title",y="Solution")
+    fig = px.bar(bar,x="Solutions",y="Value (rate)")
     return fig
     
 if __name__ == '__main__':
