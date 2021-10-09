@@ -120,7 +120,7 @@ app.layout = html.Div([
     Input("a_input","value"),
     Input("E_input","value"),
     Input("L_input","value"),
-    Input("M2_input","value"])
+    Input("M2_input","value")])
 def update_graph(m,a,E,L,m2):
     s = np.linspace(0,1,1000)
     L1 = L1_sol0(m,a,E,L)
