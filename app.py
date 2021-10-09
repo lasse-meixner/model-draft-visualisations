@@ -1,6 +1,7 @@
 #For Heroku (synthesised from .ipynb)
 
 import plotly.express as px
+import plotly.graph_objects as go
 import dash_core_components as dcc
 import dash_html_components as html
 import dash
@@ -70,6 +71,13 @@ app.layout = html.Div([
                         value=12, type="number")
                         ])
                     ),
+             dbc.Col(
+                html.Div(["Wm2:",
+                    dcc.Input(
+                        id="m2_input",
+                        value=11, type="number")
+                        ])
+                    ),
             dbc.Col(
                 html.Div(["Wa:",
                     dcc.Input(
@@ -111,15 +119,20 @@ app.layout = html.Div([
     [Input("m_input","value"),
     Input("a_input","value"),
     Input("E_input","value"),
-    Input("L_input","value")])
-def update_graph(m,a,E,L):
+    Input("L_input","value"),
+    Input("M2_input","value"])
+def update_graph(m,a,E,L,m2):
     s = np.linspace(0,1,1000)
     L1 = L1_sol0(m,a,E,L)
+    L1_2 = L1_sol0(m2,a,E,L)
     y1 = Pi_eq_func(a,m,s)
+    y1_2 = Pi_eq_func(a,m2,s)
     y2 = Pi_M_func(E,L1,L-L1,s)
     df = pd.DataFrame({"s_i":s,"Pi_eq":y1,"Pi_M":y2})
+    df_2 = pd.DataFrame({"s_i":s,"Pi_eq_2":y1_2,"Pi_M":y2})
     fig = px.line(df,y=["Pi_eq","Pi_M"],x="s_i",title="Decision threshold")
     fig.add_vline(x=s_eq_func(m,a,E,L,L1))
+    fig.add_trace(df2,y="Pi_eq_2",x="s_i")
     return fig
 
 @app.callback(
