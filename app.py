@@ -120,7 +120,7 @@ app.layout = html.Div([
     Input("a_input","value"),
     Input("E_input","value"),
     Input("L_input","value"),
-    Input("M2_input","value")])
+    Input("m2_input","value")])
 def update_graph(m,a,E,L,m2):
     s = np.linspace(0,1,1000)
     L1 = L1_sol0(m,a,E,L)
@@ -129,10 +129,10 @@ def update_graph(m,a,E,L,m2):
     y1_2 = Pi_eq_func(a,m2,s)
     y2 = Pi_M_func(E,L1,L-L1,s)
     df = pd.DataFrame({"s_i":s,"Pi_eq":y1,"Pi_M":y2})
-    df_2 = pd.DataFrame({"s_i":s,"Pi_eq_2":y1_2,"Pi_M":y2})
     fig = px.line(df,y=["Pi_eq","Pi_M"],x="s_i",title="Decision threshold")
     fig.add_vline(x=s_eq_func(m,a,E,L,L1))
-    fig.add_trace(df2,y="Pi_eq_2",x="s_i")
+    fig.add_trace(go.Line(y=y1_2,x=s))
+    fig.add_vline(x=s_eq_func(m2,a,E,L,L1),opacity=0.2)
     return fig
 
 @app.callback(
@@ -161,3 +161,4 @@ def update_ex_post_graph(m,a,E,L,s):
     
 if __name__ == '__main__':
     app.run_server()
+
