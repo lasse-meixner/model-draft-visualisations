@@ -23,7 +23,7 @@ def L1_sol_beta(m,a,e,L,beta_params=12):
             error = l1 - (beta.cdf(s_eq_func(m,a,e,L,l1),beta_params,beta_params) * L) #m,a,e,L,L1
             errors.append(error**2)
 
-    if np.min(errors) < 0.01:
+    if np.min(errors) > 0.01:
         print("Error large.")
         return
     else: 
