@@ -12,6 +12,23 @@ import numpy as np
 from sympy import *
 import pandas as pd
 
+from scipy.stats import beta
+
+# Function to solve for distribution other than uniform
+def L1_sol_beta(m,a,e,L,beta_params=12):
+    errors = []
+    l1 = np.arange(1,L,0.1)
+
+    for l in l1:
+            error = l1 - (beta.cdf(s_eq_func(m,a,e,L,l1),beta_params,beta_params) * L) #m,a,e,L,L1
+            errors.append(error**2)
+
+    if np.min(errors) < 0.01:
+        print("Error large.")
+        return
+    else: 
+        return l1[np.argmin(errors)+1]
+
 a,m,si,E,L2,L1,L = symbols("W_a,W_m,s_i,E_m,L_{II},L_I,L")
 pi_eq = symbols(pretty(pi)+"_eq")
 pi_m = symbols(pretty(pi)+"_M")
@@ -105,6 +122,13 @@ app.layout = html.Div([
                         ])
                     ),
             dbc.Col(
+                html.Div(["Beta_param:",
+                    dcc.Input(
+                        id="Beta_Param",
+                        value=12, type="number")
+                        ])
+                    ),
+            dbc.Col(
                 html.Div(["S_true:",
                     dcc.Slider(
                         id="s_true_input", min=0, max=1, step=0.1,
@@ -143,9 +167,10 @@ def update_graph(m,a,E,L,m2):
     Input("a_input","value"),
     Input("E_input","value"),
     Input("L_input","value"),
+    Input("Beta_Param","value"),
     Input("s_true_input","value")])
-def update_ex_post_graph(m,a,E,L,s):
-    bar = pd.DataFrame({"Solutions":["L_I","L_m","L_I_Fields","L_m_Fields"], "Value (# agents)": [L1_sol0(m,a,E,L),L_m_sol_func(m,a,E,L,s),L1_FB_func(m,a,E,L,s),L_m_FB_func(m,a,E,L,s)]})
+def update_ex_post_graph(m,a,E,L,beta_param,s):
+    bar = pd.DataFrame({"Solutions":["L_I","L_m","L_I_beta","L_I_Fields","L_m_Fields"], "Value (# agents)": [L1_sol0(m,a,E,L),L_m_sol_func(m,a,E,L,s),L1_sol_beta(m,a,E,L,beta_param),L1_FB_func(m,a,E,L,s),L_m_FB_func(m,a,E,L,s)]})
     fig = px.bar(bar,x="Solutions",y="Value (# agents)")
     return fig
 
