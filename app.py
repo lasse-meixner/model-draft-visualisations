@@ -41,6 +41,8 @@ UR = 1-(E/L_m_sol)
 unemployment_rate_func = lambdify([m,a,E,L,s_t],UR,"numpy")
 
 #FB
+L1_FB = (s_t/(1-s_t))*(E-L) + (m/a)*E
+L1_FB_func = lambdify([m,a,E,L,s_t],L1_FB,"numpy")
 L_m_FB = L+ E*(m/a) + (m*L)/((m-a)*s_t-m)
 L_m_FB_func = lambdify([m,a,E,L,s_t],L_m_FB,"numpy")
 UR_FB  = (L_m_FB - E)/L_m_FB
@@ -143,7 +145,7 @@ def update_graph(m,a,E,L,m2):
     Input("L_input","value"),
     Input("s_true_input","value")])
 def update_ex_post_graph(m,a,E,L,s):
-    bar = pd.DataFrame({"Solutions":["L_I","L_m","L_m_Fields"], "Value (# agents)": [L1_sol0(m,a,E,L),L_m_sol_func(m,a,E,L,s),L_m_FB_func(m,a,E,L,s)]})
+    bar = pd.DataFrame({"Solutions":["L_I","L_m","L_I_Fields","L_m_Fields"], "Value (# agents)": [L1_sol0(m,a,E,L),L_m_sol_func(m,a,E,L,s),L1_FB_func(m,a,E,L,s),L_m_FB_func(m,a,E,L,s)]})
     fig = px.bar(bar,x="Solutions",y="Value (# agents)")
     return fig
 
