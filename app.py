@@ -170,7 +170,7 @@ def update_graph(m,a,E,L,m2):
     Input("Beta_Param","value"),
     Input("s_true_input","value")])
 def update_ex_post_graph(m,a,E,L,beta_param,s):
-    bar = pd.DataFrame({"Solutions":["L_I","L_m","L_I_beta","L_I_Fields","L_m_Fields"], "Value (# agents)": [L1_sol0(m,a,E,L),L_m_sol_func(m,a,E,L,s),L1_sol_beta(m,a,E,L,beta_params=beta_param),L1_FB_func(m,a,E,L,s),L_m_FB_func(m,a,E,L,s)]})
+    bar = pd.DataFrame({"Solutions":["L_I","L_m","L_I_beta","L_I_Fields","L_m_Fields"], "Value (# agents)": [L1_sol0(m,a,E,L),L_m_sol_func(m,a,E,L,s),L1_sol_beta(m,a,E,L,beta_param),L1_FB_func(m,a,E,L,s),L_m_FB_func(m,a,E,L,s)]})
     fig = px.bar(bar,x="Solutions",y="Value (# agents)")
     return fig
 
