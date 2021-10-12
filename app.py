@@ -75,7 +75,6 @@ L_m_sol = L_m.subs(L1,solve(endog,L1)[0])
 L_m_sol_func = lambdify([m,a,E,L,s_t],L_m_sol,"numpy")
 
 UR = 1-(E/L_m_sol)
-UR_beta = 1-(E/L_m_sol_beta)
 unemployment_rate_func = lambdify([m,a,E,L,s_t],UR,"numpy")
 
 #FB
