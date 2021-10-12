@@ -52,10 +52,14 @@ Pi_m = E/(L1*(1-s_t)+L*s_t)
 
 L_m = L1*(1-Pi_m*s_t) + L*Pi_m*s_t
 L_m_sol = L_m.subs(L1,solve(endog,L1)[0])
+L_m_beta_sol = L_m.subs(L1,L_1_sol_beta)
 L_m_sol_func = lambdify([m,a,E,L,s_t],L_m_sol,"numpy")
+L_m_beta_func = lambdify([m,a,E,L,s_t],L_m_beta_sol,"numpy")
 
 UR = 1-(E/L_m_sol)
+UR_beta = 1-(E/L_m_beta_sol)
 unemployment_rate_func = lambdify([m,a,E,L,s_t],UR,"numpy")
+unemployment_rate_beta_func = lambdify([m,a,E,L,s_t],UR_beta,"numpy")
 
 #FB
 L1_FB = (s_t/(1-s_t))*(E-L) + (m/a)*E
