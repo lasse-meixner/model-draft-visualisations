@@ -28,6 +28,26 @@ def L1_sol_beta(m,a,e,L,beta_params=12):
         return
     else: 
         return l1[np.argmin(errors)+1]
+    
+def L_m_sol_func_beta(m,a,E,L,s_t,beta):
+    L1_solution = L1_sol_beta(m,a,E,L,beta)
+    param_dict = {"W_m":m,
+              "W_a":a,
+              "E_m":E,
+              "L":L,
+              "L_I":L1_solution,
+              "sbar": s_t}
+    return L_m.subs(param_dict)
+
+def UR_func_beta(m,a,E,L,s_t,beta):
+    L_m_solution = L_m_sol_func_beta(m,a,E,L,s_t,beta)
+    param_dict = {"W_m":m,
+              "W_a":a,
+              "E_m":E,
+              "L":L,
+              "L_I":L_m_solution,
+              "sbar": s_t}
+    return UR2.subs(param_dict)
 
 a,m,si,E,L2,L1,L = symbols("W_a,W_m,s_i,E_m,L_{II},L_I,L")
 pi_eq = symbols(pretty(pi)+"_eq")
@@ -52,14 +72,11 @@ Pi_m = E/(L1*(1-s_t)+L*s_t)
 
 L_m = L1*(1-Pi_m*s_t) + L*Pi_m*s_t
 L_m_sol = L_m.subs(L1,solve(endog,L1)[0])
-L_m_sol_beta = L_m.subs(L1,L1_sol_beta)
 L_m_sol_func = lambdify([m,a,E,L,s_t],L_m_sol,"numpy")
-L_m_func_beta = lambdify([m,a,E,L,s_t],L_m_sol_beta,"numpy")
 
 UR = 1-(E/L_m_sol)
 UR_beta = 1-(E/L_m_sol_beta)
 unemployment_rate_func = lambdify([m,a,E,L,s_t],UR,"numpy")
-unemployment_rate_func_beta = lambdify([m,a,E,L,s_t],UR_beta,"numpy")
 
 #FB
 L1_FB = (s_t/(1-s_t))*(E-L) + (m/a)*E
@@ -174,7 +191,7 @@ def update_graph(m,a,E,L,m2):
     Input("Beta_Param","value"),
     Input("s_true_input","value")])
 def update_ex_post_graph(m,a,E,L,beta_param,s):
-    bar = pd.DataFrame({"Solutions":["L_I","L_m","L_I_beta","L_m_beta","L_I_Fields","L_m_Fields"], "Value (# agents)": [L1_sol0(m,a,E,L),L_m_sol_func(m,a,E,L,s),L1_sol_beta(m,a,E,L,beta_param),L_m_func_beta(m,a,E,L,s),L1_FB_func(m,a,E,L,s),L_m_FB_func(m,a,E,L,s)]})
+    bar = pd.DataFrame({"Solutions":["L_I","L_m","L_I_beta","L_m_beta","L_I_Fields","L_m_Fields"], "Value (# agents)": [L1_sol0(m,a,E,L),L_m_sol_func(m,a,E,L,s),L1_sol_beta(m,a,E,L,beta_param),L_m_sol_func_beta(m,a,E,L,s,beta_param),L1_FB_func(m,a,E,L,s),L_m_FB_func(m,a,E,L,s)]})
     fig = px.bar(bar,x="Solutions",y="Value (# agents)")
     return fig
 
@@ -184,9 +201,10 @@ def update_ex_post_graph(m,a,E,L,beta_param,s):
     Input("a_input","value"),
     Input("E_input","value"),
     Input("L_input","value"),
+    Input("Beta_Param","value"),
     Input("s_true_input","value")])
-def update_ex_post_graph(m,a,E,L,s):
-    bar = pd.DataFrame({"Solutions":["Unemployment Rate","Unemployment Rate Beta","Unemployment Rate Fields"], "Value (rate)": [unemployment_rate_func(m,a,E,L,s),unemployment_rate_func_beta(m,a,E,L,s),UR_FB_func(m,a,E,L,s)]})
+def update_ex_post_graph(m,a,E,L,beta_param,s):
+    bar = pd.DataFrame({"Solutions":["Unemployment Rate","Unemployment Rate Beta","Unemployment Rate Fields"], "Value (rate)": [unemployment_rate_func(m,a,E,L,s),UR_func_beta(m,a,E,L,s,beta_param),UR_FB_func(m,a,E,L,s)]})
     fig = px.bar(bar,x="Solutions",y="Value (rate)")
     return fig
     
