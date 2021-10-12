@@ -29,25 +29,6 @@ def L1_sol_beta(m,a,e,L,beta_params=12):
     else: 
         return l1[np.argmin(errors)+1]
     
-def L_m_sol_func_beta(m,a,E,L,s_t,beta):
-    L1_solution = L1_sol_beta(m,a,E,L,beta)
-    param_dict = {"W_m":m,
-              "W_a":a,
-              "E_m":E,
-              "L":L,
-              "L_I":L1_solution,
-              "sbar": s_t}
-    return L_m.subs(param_dict)
-
-def UR_func_beta(m,a,E,L,s_t,beta):
-    L_m_solution = L_m_sol_func_beta(m,a,E,L,s_t,beta)
-    param_dict = {"W_m":m,
-              "W_a":a,
-              "E_m":E,
-              "L":L,
-              "L_I":L_m_solution,
-              "sbar": s_t}
-    return UR2.subs(param_dict)
 
 a,m,si,E,L2,L1,L = symbols("W_a,W_m,s_i,E_m,L_{II},L_I,L")
 pi_eq = symbols(pretty(pi)+"_eq")
@@ -84,6 +65,23 @@ L_m_FB = L+ E*(m/a) + (m*L)/((m-a)*s_t-m)
 L_m_FB_func = lambdify([m,a,E,L,s_t],L_m_FB,"numpy")
 UR_FB  = (L_m_FB - E)/L_m_FB
 UR_FB_func = lambdify([m,a,E,L,s_t],UR_FB,"numpy")
+
+#Beta
+def L_m_sol_func_beta(m,a,E,L,s_t,beta):
+    L1_solution = L1_sol_beta(m,a,E,L,beta)
+    param_dict = {"W_m":m,
+              "W_a":a,
+              "E_m":E,
+              "L":L,
+              "L_I":L1_solution,
+              "sbar": s_t}
+    return L_m.subs(param_dict)
+
+def UR_func_beta(m,a,E,L,s_t,beta):
+    L_m_solution = L_m_sol_func_beta(m,a,E,L,s_t,beta)
+    return (1-(E/L_m_solution))
+
+
 
 #Dash App
 import dash_bootstrap_components as dbc
