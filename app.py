@@ -186,7 +186,7 @@ def update_ex_post_graph(m,a,E,L,beta_param,s):
     Input("L_input","value"),
     Input("s_true_input","value")])
 def update_ex_post_graph(m,a,E,L,s):
-    bar = pd.DataFrame({"Solutions":["Unemployment Rate","Unemployment Rate Fields"], "Value (rate)": [unemployment_rate_func(m,a,E,L,s),UR_FB_func(m,a,E,L,s)]})
+    bar = pd.DataFrame({"Solutions":["Unemployment Rate","Unemployment Rate Beta","Unemployment Rate Fields"], "Value (rate)": [unemployment_rate_func(m,a,E,L,s),unemployment_rate_beta_func(m,a,E,L,s),UR_FB_func(m,a,E,L,s)]})
     fig = px.bar(bar,x="Solutions",y="Value (rate)")
     return fig
     
