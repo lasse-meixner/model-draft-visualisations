@@ -75,7 +75,7 @@ def L_m_sol_func_beta(m,a,E,L,s_t,beta):
               "L":L,
               "L_I":L1_solution,
               "sbar": s_t}
-    return L_m.subs(param_dict)
+    return float(L_m.subs(param_dict))
 
 def UR_func_beta(m,a,E,L,s_t,beta):
     L_m_solution = L_m_sol_func_beta(m,a,E,L,s_t,beta)
