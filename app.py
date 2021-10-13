@@ -188,8 +188,11 @@ def update_graph(m,a,E,L,m2):
     Input("Beta_Param","value"),
     Input("s_true_input","value")])
 def update_ex_post_graph(m,a,E,L,beta_param,s):
-    bar = pd.DataFrame({"Solutions":["L_I","L_m","L_I_beta","L_m_beta","L_I_Fields","L_m_Fields"], "Value (# agents)": [L1_sol0(m,a,E,L),L_m_sol_func(m,a,E,L,s),L1_sol_beta(m,a,E,L,beta_param),L_m_sol_func_beta(m,a,E,L,s,beta_param),L1_FB_func(m,a,E,L,s),L_m_FB_func(m,a,E,L,s)]})
-    fig = px.bar(bar,x="Solutions",y="Value (# agents)")
+    bar_df = pd.DataFrame({"Solutions":["L_I","L_m","L_I_beta","L_m_beta","L_I_Fields","L_m_Fields"], 
+                           "Value (# agents)": [L1_sol0(m,a,E,L),L_m_sol_func(m,a,E,L,s),L1_sol_beta(m,a,E,L,beta_param),L_m_sol_func_beta(m,a,E,L,s,beta_param),L1_FB_func(m,a,E,L,s),L_m_FB_func(m,a,E,L,s)],
+                           "Category":["L_I","L_m"]*3})
+    fig = px.bar(bar_df,x="Solutions",y="Value (# agents)",color="Category")
+    fig.add_shape(type="line",xref="paper",x0=0,y0=50,x1=1,y1=50,line=dict(color="black",width=3))
     return fig
 
 @app.callback(
@@ -201,8 +204,10 @@ def update_ex_post_graph(m,a,E,L,beta_param,s):
     Input("Beta_Param","value"),
     Input("s_true_input","value")])
 def update_ex_post_graph(m,a,E,L,beta_param,s):
-    bar = pd.DataFrame({"Solutions":["Unemployment Rate","Unemployment Rate Beta","Unemployment Rate Fields"], "Value (rate)": [unemployment_rate_func(m,a,E,L,s),UR_func_beta(m,a,E,L,s,beta_param),UR_FB_func(m,a,E,L,s)]})
-    fig = px.bar(bar,x="Solutions",y="Value (rate)")
+    bar_df = pd.DataFrame({"Solutions":["Unemployment Rate","Unemployment Rate Beta","Unemployment Rate Fields"], 
+                           "Value (rate)": [unemployment_rate_func(m,a,E,L,s),UR_func_beta(m,a,E,L,s,beta_param),UR_FB_func(m,a,E,L,s)]})
+    fig = px.bar(bar_df,x="Solutions",y="Value (rate)")
+    fig.add_shape(type="line",xref="paper",x0=0,y0=0.25,x1=1,y1=0.25,line=dict(color="black",width=3))
     return fig
     
 if __name__ == '__main__':
